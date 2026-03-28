@@ -43,3 +43,5 @@ env/
 # Логи бота и бекенда
 logs/
 *.log
+
+docs_html/
