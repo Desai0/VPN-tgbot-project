@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: ${DATABASE_URL:-sqlite+aiosqlite:///app/data/vpn.db}
+      DATABASE_URL: ${DATABASE_URL:-sqlite+aiosqlite:////app/data/vpn.db}
       HYSTERIA_API_URL: ${HYSTERIA_API_URL:-http://host.docker.internal:9999}
       HYSTERIA_API_TOKEN: ${HYSTERIA_API_TOKEN}
       HYSTERIA_SERVER_HOST: ${HYSTERIA_SERVER_HOST}

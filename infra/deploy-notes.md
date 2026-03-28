@@ -10,7 +10,7 @@
 
 ```env
 BOT_TOKEN=replace_with_real_bot_token
-DATABASE_URL=sqlite+aiosqlite:///app/data/vpn.db
+DATABASE_URL=sqlite+aiosqlite:////app/data/vpn.db
 BACKEND_BIND_IP=127.0.0.1
 BACKEND_PORT=8000
 HYSTERIA_API_URL=http://host.docker.internal:9999
