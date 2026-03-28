@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from backend.models import Subscription, User
 
@@ -101,6 +102,33 @@ async def get_active_subscription(
     statement: Select[tuple[Subscription]] = (
         select(Subscription)
         .where(Subscription.user_id == user_id)
+        .where(Subscription.is_active.is_(True))
+        .where(Subscription.end_date >= datetime.now(timezone.utc))
+        .order_by(Subscription.end_date.desc())
+        .limit(1)
+    )
+    result = await session.execute(statement)
+    return result.scalars().first()
+
+
+async def get_active_subscription_by_password(
+    session: AsyncSession,
+    hysteria_password: str,
+) -> Subscription | None:
+    """!
+    @brief Возвращает активную подписку по паролю Hysteria 2.
+    @details Функция используется HTTP auth backend для Hysteria 2. Она ищет
+    активную и неистекшую подписку по auth-значению клиента и заранее
+    загружает связанного пользователя.
+    @param session Активная асинхронная сессия SQLAlchemy.
+    @param hysteria_password Пароль или UUID, присланный клиентом Hysteria 2.
+    @return Subscription | None ORM-объект подписки или None, если запись не найдена.
+    """
+
+    statement: Select[tuple[Subscription]] = (
+        select(Subscription)
+        .options(selectinload(Subscription.user))
+        .where(Subscription.hysteria_password == hysteria_password)
         .where(Subscription.is_active.is_(True))
         .where(Subscription.end_date >= datetime.now(timezone.utc))
         .order_by(Subscription.end_date.desc())
