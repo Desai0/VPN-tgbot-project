@@ -19,9 +19,8 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           passphrase: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
-          script_stop: true
           command_timeout: 30m
           script: |
             cd '${{ secrets.DEPLOY_PATH }}'
             git pull --ff-only
-            docker compose -f infra/docker-compose.yml --env-file infra/.env up -d --build --remove-orphans
+            sudo docker compose -f infra/docker-compose.yml --env-file infra/.env up -d --build --remove-orphans
