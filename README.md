@@ -31,3 +31,9 @@
 ## 👥 Команда проекта
 * **Колобов** — DevOps / Backend (Инфраструктура, Docker, GitHub Actions, Hysteria 2 API, Проектирование БД, логика подписок, интеграция компонентов)
 * **Васильев** — Telegram UI Developer (Разработка интерфейса бота, aiogram 3, платежные системы)
+
+## 📄 Документы
+* [Техническое задание](docs/technical-specification.md)
+* [Методология разработки](docs/development-methodology.md)
+* [Требования к продукту](docs/requirements.md)
+* [Архитектура и техническое решение](docs/architecture.md)
