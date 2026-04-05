@@ -24,6 +24,7 @@ wheels/
 # Виртуальные окружения
 venv/
 .venv/
+.venv*/
 env/
 .env_python/
 
@@ -45,3 +46,4 @@ logs/
 *.log
 
 docs_html/
+docs/
