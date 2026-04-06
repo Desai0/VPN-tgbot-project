@@ -37,3 +37,29 @@
 * [Методология разработки](docs/development-methodology.md)
 * [Требования к продукту](docs/requirements.md)
 * [Архитектура и техническое решение](docs/architecture.md)
+* [План тестирования и сценарии](docs/testing-plan.md)
+* [Процесс развертывания](docs/deployment.md)
+* [Wiki-ready страницы для GitHub Wiki](docs/wiki/Home.md)
+
+## 🧪 Тестирование
+
+Запуск unit-тестов:
+
+```bash
+python -m unittest discover -s tests -p "test_*.py"
+```
+
+## 📚 Документирование кода (HTML)
+
+Генерация HTML-документации Doxygen:
+
+```bash
+doxygen Doxyfile
+```
+
+Результат: `docs_html/html/index.html`.
+
+В CI добавлен workflow `.github/workflows/ci.yml`, который:
+- запускает unit-тесты;
+- генерирует HTML-документацию;
+- сохраняет ее как artifact (`doxygen-html`).
