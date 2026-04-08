@@ -20,6 +20,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.crud import (
+    add_subscription_days,
     create_subscription,
     create_user,
     get_active_subscription,
@@ -281,6 +282,39 @@ async def generate_vpn_config(
         days_left = calculate_days_left(new_subscription.end_date)
 
     config_url: str = hysteria_client.build_client_uri(password)
+    return VpnConfigResponse(
+        telegram_id=telegram_id,
+        config_url=config_url,
+        days_left=days_left,
+    )
+
+
+@app.post("/vpn/subscribe/{telegram_id}", response_model=VpnConfigResponse, tags=["VPN"])
+async def subscribe_vpn(
+    telegram_id: int,
+    days: int = 30,
+    db: AsyncSession = Depends(get_db),
+) -> VpnConfigResponse:
+    """!
+    @brief Продлевает или создаёт подписку и возвращает конфигурацию.
+    @details Используется после успешной оплаты: добавляет дни к активной
+    подписке либо создаёт новую, затем возвращает URI для клиента Hysteria 2.
+    @param telegram_id Идентификатор пользователя в Telegram.
+    @param days Количество оплаченных дней.
+    @param db Сессия базы данных, внедрённая через FastAPI.
+    @return VpnConfigResponse Объект с ссылкой и остатком дней.
+    """
+
+    user = await get_user_by_tg_id(db, telegram_id)
+    if user is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Пользователь не найден. Сначала зарегистрируйтесь.",
+        )
+
+    subscription = await add_subscription_days(db, user.id, days)
+    days_left: int = calculate_days_left(subscription.end_date)
+    config_url: str = hysteria_client.build_client_uri(subscription.hysteria_password)
     return VpnConfigResponse(
         telegram_id=telegram_id,
         config_url=config_url,

@@ -77,6 +77,18 @@ class BackendClient:
             days_left=int(payload["days_left"]),
         )
 
+    async def subscribe_vpn(self, telegram_id: int, days: int) -> VpnConfig:
+        payload = await self._request_json(
+            "POST",
+            f"/vpn/subscribe/{telegram_id}",
+            params={"days": str(days)},
+        )
+        return VpnConfig(
+            telegram_id=int(payload["telegram_id"]),
+            config_url=str(payload["config_url"]),
+            days_left=int(payload["days_left"]),
+        )
+
     async def get_user_stats(self, telegram_id: int) -> UserStats:
         payload = await self._request_json("GET", f"/users/{telegram_id}/stats")
         return UserStats(

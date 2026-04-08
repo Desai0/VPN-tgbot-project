@@ -8,6 +8,7 @@ SQLAlchemy AsyncSession. Здесь реализованы операции по
 
 from __future__ import annotations
 
+import uuid
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import Select, select
@@ -109,6 +110,32 @@ async def get_active_subscription(
     )
     result = await session.execute(statement)
     return result.scalars().first()
+
+
+async def add_subscription_days(
+    session: AsyncSession,
+    user_id: int,
+    days: int,
+) -> Subscription:
+    """!
+    @brief Добавляет дни к активной подписке или создаёт новую.
+    @details Если у пользователя есть неистёкшая активная подписка, срок
+    продлевается на указанное число дней. Иначе создаётся новая подписка.
+    @param session Активная асинхронная сессия SQLAlchemy.
+    @param user_id Идентификатор пользователя в таблице users.
+    @param days Количество дней для продления или новой подписки.
+    @return Subscription Актуальная ORM-подписка после изменений.
+    """
+
+    existing: Subscription | None = await get_active_subscription(session, user_id)
+    if existing is not None:
+        existing.end_date = existing.end_date + timedelta(days=days)
+        await session.commit()
+        await session.refresh(existing)
+        return existing
+
+    password: str = str(uuid.uuid4())
+    return await create_subscription(session, user_id, password, days)
 
 
 async def get_active_subscription_by_password(

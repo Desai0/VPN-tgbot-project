@@ -188,6 +188,16 @@ class BackendApiTests(unittest.IsolatedAsyncioTestCase):
         )
         hysteria_client.kick_clients.assert_awaited_once_with(["tg_1001"])
 
+    async def test_subscribe_vpn_extends_active_subscription(self) -> None:
+        await self._register_user()
+        first = await self._client.post("/vpn/subscribe/1001?days=30")
+        self.assertEqual(first.status_code, 200)
+        first_left = first.json()["days_left"]
+        second = await self._client.post("/vpn/subscribe/1001?days=14")
+        self.assertEqual(second.status_code, 200)
+        second_left = second.json()["days_left"]
+        self.assertGreaterEqual(second_left, first_left + 13)
+
 
 if __name__ == "__main__":
     unittest.main()
