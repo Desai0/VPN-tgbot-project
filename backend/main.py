@@ -8,11 +8,11 @@
 
 from __future__ import annotations
 
+import math
+import uuid
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
-import math
-import uuid
 
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
@@ -66,7 +66,9 @@ def calculate_days_left(end_date: datetime) -> int:
     """
 
     normalized_end_date: datetime = (
-        end_date if end_date.tzinfo is not None else end_date.replace(tzinfo=timezone.utc)
+        end_date
+        if end_date.tzinfo is not None
+        else end_date.replace(tzinfo=timezone.utc)
     )
     remaining_seconds: float = (
         normalized_end_date - datetime.now(timezone.utc)

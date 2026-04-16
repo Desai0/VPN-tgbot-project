@@ -10,10 +10,9 @@ import uuid
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.filters import Command, CommandStart
-from aiogram.types import LabeledPrice, PreCheckoutQuery
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from backend_client import BackendClient, BackendClientError, UserStats, VpnConfig
 from dotenv import load_dotenv
-
-from backend_client import BackendClient, BackendClientError, VpnConfig
 from ui_components import (
     PARSE_HTML,
     TEXT_BUY,
@@ -80,6 +79,18 @@ def build_telegram_session() -> AiohttpSession:
     return session
 
 
+def build_help_text() -> str:
+    return (
+        "Скелет бота подключен к backend.\n\n"
+        "Что уже работает:\n"
+        "/start - регистрация пользователя в backend и главное меню\n"
+        '"Купить VPN" - вызов генерации конфигурации\n'
+        '"Мой профиль" - чтение статуса подписки и трафика\n\n'
+        "Переменные окружения:\n"
+        "BOT_TOKEN - токен Telegram-бота\n"
+        "BACKEND_URL - адрес backend, по умолчанию http://backend:8000\n"
+        "BACKEND_TIMEOUT_SECONDS - timeout запросов к backend"
+    )
 bot = Bot(token=BOT_TOKEN, session=build_telegram_session())
 dp = Dispatcher()
 backend_client = BackendClient()

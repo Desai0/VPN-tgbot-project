@@ -1,0 +1,21 @@
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+include = '\.pyi?$'
+extend-exclude = '''
+(
+  ^docs_html/
+)
+'''
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+extend-exclude = ["docs_html"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["B008", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/test_backend_api.py" = ["S101"]

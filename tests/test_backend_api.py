@@ -99,7 +99,9 @@ class BackendApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(first_response.json()["status"], "success")
         self.assertIn("уже зарегистрирован", second_response.json()["message"])
 
-    async def test_generate_vpn_config_creates_and_reuses_active_subscription(self) -> None:
+    async def test_generate_vpn_config_creates_and_reuses_active_subscription(
+        self,
+    ) -> None:
         await self._register_user()
 
         first_response = await self._generate_vpn_config(days=30)
@@ -130,7 +132,9 @@ class BackendApiTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"ok": True, "id": "tg_1001"})
 
-    async def test_user_stats_without_active_subscription_returns_zeroed_payload(self) -> None:
+    async def test_user_stats_without_active_subscription_returns_zeroed_payload(
+        self,
+    ) -> None:
         await self._register_user()
 
         response = await self._client.get("/users/1001/stats")
@@ -149,7 +153,9 @@ class BackendApiTests(unittest.IsolatedAsyncioTestCase):
             },
         )
 
-    async def test_user_stats_with_active_subscription_uses_hysteria_status(self) -> None:
+    async def test_user_stats_with_active_subscription_uses_hysteria_status(
+        self,
+    ) -> None:
         await self._register_user()
         await self._generate_vpn_config()
 
