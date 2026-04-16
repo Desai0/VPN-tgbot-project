@@ -20,9 +20,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import DeclarativeBase
 
 DATABASE_URL: str = (
-    os.getenv("DATABASE_URL")
-    or os.getenv("DB_URL")
-    or "sqlite+aiosqlite:///./vpn.db"
+    os.getenv("DATABASE_URL") or os.getenv("DB_URL") or "sqlite+aiosqlite:///./vpn.db"
 )
 
 engine: AsyncEngine = create_async_engine(DATABASE_URL, echo=False)

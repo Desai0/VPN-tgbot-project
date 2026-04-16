@@ -9,10 +9,8 @@ from aiogram import Bot, Dispatcher, F, types
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.filters import Command, CommandStart
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from dotenv import load_dotenv
-
 from backend_client import BackendClient, BackendClientError, UserStats, VpnConfig
-
+from dotenv import load_dotenv
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
@@ -73,8 +71,8 @@ def build_help_text() -> str:
         "Скелет бота подключен к backend.\n\n"
         "Что уже работает:\n"
         "/start - регистрация пользователя в backend и главное меню\n"
-        "\"Купить VPN\" - вызов генерации конфигурации\n"
-        "\"Мой профиль\" - чтение статуса подписки и трафика\n\n"
+        '"Купить VPN" - вызов генерации конфигурации\n'
+        '"Мой профиль" - чтение статуса подписки и трафика\n\n'
         "Переменные окружения:\n"
         "BOT_TOKEN - токен Telegram-бота\n"
         "BACKEND_URL - адрес backend, по умолчанию http://backend:8000\n"

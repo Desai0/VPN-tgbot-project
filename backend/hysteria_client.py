@@ -316,7 +316,9 @@ class HysteriaApiClient:
                     return {}
                 data: Any = response.json()
         except (httpx.HTTPError, ValueError) as exc:
-            raise HysteriaApiError(f"Не удалось выполнить запрос к Hysteria API: {exc}") from exc
+            raise HysteriaApiError(
+                f"Не удалось выполнить запрос к Hysteria API: {exc}"
+            ) from exc
 
         if not isinstance(data, dict):
             raise HysteriaApiError("Hysteria API вернул ответ в неожиданном формате.")
